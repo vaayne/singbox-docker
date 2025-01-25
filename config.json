@@ -1,0 +1,165 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "address": "tls://1.1.1.1"
+      },
+      {
+        "tag": "google",
+        "address": "tls://8.8.8.8"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "trojan",
+      "tag": "trojan-in",
+      "listen": "::",
+      "listen_port": ${PORT_TROJAN},
+      "users": [
+        {
+          "name": "$USERNAME",
+          "password": "$PASSWORD"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL"
+        }
+      },
+      "fallback": {
+        "server": "hn.algolia.com",
+        "server_port": 443
+      },
+      "multiplex": {
+        "enabled": true
+      }
+    },
+    {
+      "type": "vless",
+      "listen": "::",
+      "listen_port": ${PORT_VLESS},
+      "users": [
+        {
+          "uuid": "$UUID",
+          "flow": "xtls-rprx-vision"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL"
+        }
+      }
+    },
+    {
+      "tag": "vmess-ws",
+      "type": "vmess",
+      "listen": "::",
+      "listen_port": ${PORT_VMESS},
+      "users": [
+        {
+          "uuid": "$UUID"
+        }
+      ],
+      "transport": {
+        "type": "ws",
+        "path": "/ws",
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL"
+        }
+      }
+    },
+    {
+      "tag": "hysteria2",
+      "type": "hysteria2",
+      "listen": "::",
+      "listen_port": ${PORT_HYSTERIA},
+      "sniff": true,
+      "sniff_override_destination": false,
+      "users": [
+        {
+          "password": "$UUID"
+        }
+      ],
+      "ignore_client_bandwidth": false,
+      "masquerade": "https://bing.com",
+      "tls": {
+        "enabled": true,
+        "alpn": ["h3"],
+        "min_version": "1.3",
+        "max_version": "1.3",
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL"
+        }
+      }
+    },
+    {
+      "tag": "tuic",
+      "type": "tuic",
+      "listen": "::",
+      "listen_port": ${PORT_TUIC},
+      "users": [
+        {
+          "uuid": "$UUID",
+          "password": "$PASSWORD"
+        }
+      ],
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "alpn": ["h3"],
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      }
+    ],
+    "final": "direct"
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "/etc/sing-box/cache.db",
+      "cache_id": "mycacheid",
+      "store_fakeip": true
+    }
+  }
+}
