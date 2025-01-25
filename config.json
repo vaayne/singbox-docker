@@ -20,7 +20,7 @@
       "type": "trojan",
       "tag": "trojan-in",
       "listen": "::",
-      "listen_port": ${PORT_TROJAN},
+      "listen_port": "$PORT_TROJAN",
       "users": [
         {
           "name": "$USERNAME",
@@ -46,7 +46,7 @@
     {
       "type": "vless",
       "listen": "::",
-      "listen_port": ${PORT_VLESS},
+      "listen_port": "$PORT_VLESS",
       "users": [
         {
           "uuid": "$UUID",
@@ -66,7 +66,7 @@
       "tag": "vmess-ws",
       "type": "vmess",
       "listen": "::",
-      "listen_port": ${PORT_VMESS},
+      "listen_port": "$PORT_VMESS",
       "users": [
         {
           "uuid": "$UUID"
@@ -90,7 +90,7 @@
       "tag": "hysteria2",
       "type": "hysteria2",
       "listen": "::",
-      "listen_port": ${PORT_HYSTERIA},
+      "listen_port": "$PORT_HYSTERIA",
       "sniff": true,
       "sniff_override_destination": false,
       "users": [
@@ -116,7 +116,7 @@
       "tag": "tuic",
       "type": "tuic",
       "listen": "::",
-      "listen_port": ${PORT_TUIC},
+      "listen_port": "$PORT_TUIC",
       "users": [
         {
           "uuid": "$UUID",

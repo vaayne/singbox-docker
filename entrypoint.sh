@@ -17,14 +17,28 @@ configFilePath="/etc/sing-box/config.json"
 logFilePath="/tmp/sing-box.log"
 
 # Environment variables with default values for ports
-: "${PORT_TROJAN:=20441}"
-: "${PORT_VLESS:=20442}"
-: "${PORT_VMESS:=20443}"
-: "${PORT_HYSTERIA:=20444}"
-: "${PORT_TUIC:=20445}"
+PORT_TROJAN="${PORT_TROJAN:=20441}"
+PORT_VLESS="${PORT_VLESS:=20442}"
+PORT_VMESS="${PORT_VMESS:=20443}"
+PORT_HYSTERIA="${PORT_HYSTERIA:=20444}"
+PORT_TUIC="${PORT_TUIC:=20445}"
 
 # Update configuration with environment variables
-envsubst <"$configFilePath" >"$configFilePath.tmp" && mv "$configFilePath.tmp" "$configFilePath"
+sed -i \
+    -e "s/\"\$PORT_TROJAN\"/$PORT_TROJAN/g" \
+    -e "s/\"\$PORT_VLESS\"/$PORT_VLESS/g" \
+    -e "s/\"\$PORT_VMESS\"/$PORT_VMESS/g" \
+    -e "s/\"\$PORT_HYSTERIA\"/$PORT_HYSTERIA/g" \
+    -e "s/\"\$PORT_TUIC\"/$PORT_TUIC/g" \
+    -e "s/\$DOMAIN/$DOMAIN/g" \
+    -e "s/\$EMAIL/$EMAIL/g" \
+    -e "s/\$UUID/$UUID/g" \
+    -e "s/\$USERNAME/$USERNAME/g" \
+    -e "s/\$PASSWORD/$PASSWORD/g" \
+    "$configFilePath"
+
+# show config as debug
+cat $configFilePath
 
 echo "entry"
 sing-box version
