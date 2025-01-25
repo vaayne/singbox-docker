@@ -3,26 +3,22 @@ services:
     image: ghcr.io/vaayne/singbox-docker:latest
     container_name: sing-box
     restart: unless-stopped
-    network_mode: "host"
+    network_mode: host
     environment:
-      - DOMAIN="your-domain.com"
-      - EMAIL="your-email@example.com"
-      - UUID="your-uuid"
-      - USERNAME="your-username"
-      - PASSWORD="your-password"
-    ports:
-      - 20440:20440
-      - 20441:20441
-      - 20442:20442
-      - 20443:20443
-      - 20444:20444
-      - 20445:20445
+      - DOMAIN={your-domain.com}
+      - EMAIL={your-email@example.com}
+      - UUID={your-uuid}
+      - USERNAME={your-username}
+      - PASSWORD={your-password}
+      - CF_TOKEN={cf-token}
+      # Options
+      - PORT_TROJAN=20441
+      - PORT_VLESS=20442
+      - PORT_VMESS=20443
+      - PORT_HYSTERIA=20444
+      - PORT_TUIC=20445
     volumes:
       - tls-data:/tls
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
 
 volumes:
   tls-data:
