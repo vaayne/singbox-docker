@@ -22,6 +22,8 @@ PORT_VLESS="${PORT_VLESS:=20442}"
 PORT_VMESS="${PORT_VMESS:=20443}"
 PORT_HYSTERIA="${PORT_HYSTERIA:=20444}"
 PORT_TUIC="${PORT_TUIC:=20445}"
+# PORT_TLS_HTTP_CHALLENGE is used for issue TLS
+PORT_TLS_HTTP_CHALLENGE="${PORT_TLS_HTTP_CHALLENGE:=20440}"
 
 # Update configuration with environment variables
 sed -i \
@@ -30,6 +32,7 @@ sed -i \
     -e "s/\"\$PORT_VMESS\"/$PORT_VMESS/g" \
     -e "s/\"\$PORT_HYSTERIA\"/$PORT_HYSTERIA/g" \
     -e "s/\"\$PORT_TUIC\"/$PORT_TUIC/g" \
+    -e "s/\"\$PORT_TLS_HTTP_CHALLENGE\"/$PORT_TLS_HTTP_CHALLENGE/g" \
     -e "s/\$DOMAIN/$DOMAIN/g" \
     -e "s/\$EMAIL/$EMAIL/g" \
     -e "s/\$UUID/$UUID/g" \

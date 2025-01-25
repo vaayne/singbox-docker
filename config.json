@@ -32,7 +32,8 @@
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
-          "email": "$EMAIL"
+          "email": "$EMAIL",
+          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
         }
       },
       "fallback": {
@@ -58,7 +59,8 @@
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
-          "email": "$EMAIL"
+          "email": "$EMAIL",
+          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
         }
       }
     },
@@ -82,7 +84,8 @@
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
-          "email": "$EMAIL"
+          "email": "$EMAIL",
+          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
         }
       }
     },
@@ -108,7 +111,8 @@
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
-          "email": "$EMAIL"
+          "email": "$EMAIL",
+          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
         }
       }
     },
@@ -130,7 +134,8 @@
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
-          "email": "$EMAIL"
+          "email": "$EMAIL",
+          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
         }
       }
     }

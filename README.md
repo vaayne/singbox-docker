@@ -59,6 +59,7 @@ export PASSWORD="your-password"
 2. Run the Docker container:
 ```bash
 docker run -d \
+  -p 20440:20440 \
   -p 20441:20441 \
   -p 20442:20442 \
   -p 20443:20443 \
@@ -71,20 +72,6 @@ docker run -d \
   -e PASSWORD=$PASSWORD \
   ghcr.io/vaayne/singbox-docker:latest
 ```
-
-
-docker run --rm \
-  -p 20441:20441 \
-  -p 20442:20442 \
-  -p 20443:20443 \
-  -p 20444:20444 \
-  -p 20445:20445 \
-  -e DOMAIN=$DOMAIN \
-  -e EMAIL=$EMAIL \
-  -e UUID=$UUID \
-  -e USERNAME=$USERNAME \
-  -e PASSWORD=$PASSWORD \
-  ghcr.io/vaayne/singbox-docker:latest
 
 ## Configuration Details
 
