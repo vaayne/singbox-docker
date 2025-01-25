@@ -33,7 +33,10 @@
         "acme": {
           "domain": "$DOMAIN",
           "email": "$EMAIL",
-          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
         }
       },
       "fallback": {
@@ -60,7 +63,10 @@
         "acme": {
           "domain": "$DOMAIN",
           "email": "$EMAIL",
-          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
         }
       }
     },
@@ -85,7 +91,10 @@
         "acme": {
           "domain": "$DOMAIN",
           "email": "$EMAIL",
-          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
         }
       }
     },
@@ -105,14 +114,19 @@
       "masquerade": "https://bing.com",
       "tls": {
         "enabled": true,
-        "alpn": ["h3"],
+        "alpn": [
+          "h3"
+        ],
         "min_version": "1.3",
         "max_version": "1.3",
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
           "email": "$EMAIL",
-          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
         }
       }
     },
@@ -130,12 +144,17 @@
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
-        "alpn": ["h3"],
+        "alpn": [
+          "h3"
+        ],
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
           "email": "$EMAIL",
-          "alternative_http_port": "$PORT_TLS_HTTP_CHALLENGE"
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
         }
       }
     }
