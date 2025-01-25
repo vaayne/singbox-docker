@@ -40,9 +40,6 @@ sed -i \
     -e "s/\$PASSWORD/$PASSWORD/g" \
     "$configFilePath"
 
-# show config as debug
-cat $configFilePath
-
 echo "entry"
 sing-box version
 
