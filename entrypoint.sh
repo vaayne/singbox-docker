@@ -47,7 +47,7 @@ sing-box version
 echo -e "\nconfig:"
 sing-box check -c "$configFilePath" || cat "$configFilePath"
 sing-box format -c "$configFilePath" -w
-cat "$configFilePath"
+# cat "$configFilePath"
 
 echo -e "\nstarting"
 touch "$logFilePath"
