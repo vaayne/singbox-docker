@@ -73,6 +73,7 @@ docker run -d \
   ghcr.io/vaayne/singbox-docker:latest
 ```
 
+
 ## Configuration Details
 
 The configuration includes:
