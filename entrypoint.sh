@@ -25,7 +25,7 @@ sed -i \
     -e "s/\"\$PORT_TUIC\"/$PORT_TUIC/g" \
     -e "s/\"\$PORT_TUIC_PROXY\"/$PORT_TUIC_PROXY/g" \
     -e "s/\"\$PORT_MIXED\"/$PORT_MIXED/g" \
-    -e "s/\"\$SOCKS_SERVER\"/$SOCKS_SERVER/g" \
+    -e "s/\$SOCKS_SERVER/$SOCKS_SERVER/g" \
     -e "s/\$CF_TOKEN/$CF_TOKEN/g" \
     -e "s/\$DOMAIN/$DOMAIN/g" \
     -e "s/\$EMAIL/$EMAIL/g" \
