@@ -1,99 +1,254 @@
-# Sing-Box Docker Configuration
+# Sing-Box Docker
 
-A Docker-based configuration for running multiple proxy protocols using [sing-box](https://sing-box.sagernet.org/), including Trojan, VLESS, VMess, Hysteria2, and TUIC.
+A production-ready Docker setup for [sing-box](https://sing-box.sagernet.org/) - a universal proxy platform supporting multiple protocols with automatic TLS certificate management.
 
-## Features
+## 🚀 Features
 
-- Multiple protocol support:
-  - Trojan
-  - VLESS (with XTLS Vision)
-  - VMess (WebSocket)
-  - Hysteria2
-  - TUIC
-- Automatic TLS certificate management with ACME
-- DNS over TLS configuration
-- BBR congestion control for TUIC
-- Caching support
-- Docker containerization
+- **Multi-Protocol Support**
+  - **Trojan** - TLS-based protocol with website fallback
+  - **VLESS** - Lightweight protocol with XTLS Vision flow control
+  - **VMess** - Versatile protocol with WebSocket transport
+  - **Hysteria2** - QUIC-based protocol for unstable networks
+  - **TUIC** - QUIC-based protocol with BBR congestion control
+  - **Mixed** - HTTP/SOCKS proxy support
 
-## Prerequisites
+- **Security & Performance**
+  - Automatic TLS certificate management via ACME (Cloudflare DNS-01)
+  - DNS over TLS (DoT) with Cloudflare and Google
+  - Built-in caching for improved performance
+  - BBR congestion control optimization
 
-- Docker
-- A domain name
-- Port forwarding configured on your server for the following ports:
-  - 20441 (Trojan)
-  - 20442 (VLESS)
-  - 20443 (VMess)
-  - 20444 (Hysteria2)
-  - 20445 (TUIC)
+- **Easy Deployment**
+  - Single Docker image with all dependencies
+  - Docker Compose support
+  - Environment variable configuration
+  - Automatic configuration validation
 
-## Environment Variables
+## 📋 Prerequisites
 
-The following environment variables need to be set:
+- Docker and Docker Compose installed
+- A domain name pointing to your server
+- Cloudflare account with API token (for DNS-01 challenge)
+- Open ports: 20441-20447 (configurable)
 
-- `DOMAIN`: Your domain name
-- `EMAIL`: Email address for ACME certificate registration
-- `UUID`: UUID for VLESS, VMess, and Hysteria2
-- `USERNAME`: Username for Trojan
-- `PASSWORD`: Password for Trojan and TUIC
+## 🔧 Quick Start
 
-Optional port configuration:
-- `PORT_TROJAN`: Trojan port (default: 20441)
-- `PORT_VLESS`: VLESS port (default: 20442)
-- `PORT_VMESS`: VMess port (default: 20443)
-- `PORT_HYSTERIA`: Hysteria2 port (default: 20444)
-- `PORT_TUIC`: TUIC port (default: 20445)
-- `NOHUP`: Set to "true" to run in background mode
+### 1. Clone the repository
 
-## Quick Start
-
-1. Set up environment variables:
 ```bash
-export DOMAIN="your-domain.com"
-export EMAIL="your-email@example.com"
-export UUID="your-uuid"
-export USERNAME="your-username"
-export PASSWORD="your-password"
+git clone https://github.com/yourusername/singbox-docker.git
+cd singbox-docker
 ```
 
-2. Run the Docker container:
+### 2. Configure environment variables
+
+Create a `.env` file:
+
+```bash
+# Required variables
+DOMAIN=your-domain.com
+EMAIL=your-email@example.com
+UUID=$(uuidgen)  # Generate a new UUID
+USERNAME=your-username
+PASSWORD=your-secure-password
+CF_TOKEN=your-cloudflare-api-token
+
+# Optional port configuration (defaults shown)
+TROJAN_PORT=20441
+VLESS_PORT=20442
+VMESS_PORT=20443
+HYSTERIA2_PORT=20444
+TUIC_PORT=20445
+TUIC_PROXY_PORT=20446
+MIXED_PORT=20447
+
+# Optional: Run in background mode
+NOHUP=false
+```
+
+### 3. Start the service
+
+Using Docker Compose (recommended):
+
+```bash
+docker-compose up -d
+```
+
+Or using Docker directly:
+
 ```bash
 docker run -d \
-  -p 20440:20440 \
-  -p 20441:20441 \
-  -p 20442:20442 \
-  -p 20443:20443 \
-  -p 20444:20444 \
-  -p 20445:20445 \
+  --name singbox \
+  --network host \
+  --restart unless-stopped \
+  -v singbox-tls:/tls \
   -e DOMAIN=$DOMAIN \
   -e EMAIL=$EMAIL \
   -e UUID=$UUID \
   -e USERNAME=$USERNAME \
   -e PASSWORD=$PASSWORD \
+  -e CF_TOKEN=$CF_TOKEN \
   ghcr.io/vaayne/singbox-docker:latest
 ```
 
+### 4. Check logs
 
-## Configuration Details
+```bash
+docker-compose logs -f
+# or
+docker logs -f singbox
+```
 
-The configuration includes:
+## 📱 Client Configuration
 
-- DNS servers: Cloudflare (1.1.1.1) and Google (8.8.8.8) over TLS
-- TLS enabled for all protocols
-- Automatic certificate management using ACME
-- WebSocket transport for VMess
-- BBR congestion control for TUIC
-- Cache file enabled for better performance
+### Protocol Details
 
+| Protocol | Port | Authentication | Features |
+|----------|------|----------------|----------|
+| Trojan | 20441 | Username + Password | TLS with website fallback |
+| VLESS | 20442 | UUID | XTLS Vision flow control |
+| VMess | 20443 | UUID | WebSocket transport |
+| Hysteria2 | 20444 | Password | QUIC, optimized for poor networks |
+| TUIC | 20445 | UUID + Password | QUIC with BBR |
+| Mixed | 20447 | None | HTTP/SOCKS proxy |
 
-## License
+### Example Client Configurations
 
-This project is open source and available under the MIT License.
+<details>
+<summary>Trojan Configuration</summary>
 
-## Contributing
+```json
+{
+  "type": "trojan",
+  "server": "your-domain.com",
+  "server_port": 20441,
+  "password": "your-username:your-password",
+  "tls": {
+    "enabled": true,
+    "server_name": "your-domain.com"
+  }
+}
+```
+</details>
+
+<details>
+<summary>VLESS Configuration</summary>
+
+```json
+{
+  "type": "vless",
+  "server": "your-domain.com",
+  "server_port": 20442,
+  "uuid": "your-uuid",
+  "flow": "xtls-rprx-vision",
+  "tls": {
+    "enabled": true,
+    "server_name": "your-domain.com"
+  }
+}
+```
+</details>
+
+<details>
+<summary>VMess Configuration</summary>
+
+```json
+{
+  "type": "vmess",
+  "server": "your-domain.com",
+  "server_port": 20443,
+  "uuid": "your-uuid",
+  "transport": {
+    "type": "ws",
+    "path": "/vmess"
+  },
+  "tls": {
+    "enabled": true,
+    "server_name": "your-domain.com"
+  }
+}
+```
+</details>
+
+## 🛠️ Advanced Configuration
+
+### Custom Ports
+
+You can customize ports by setting environment variables:
+
+```bash
+export TROJAN_PORT=8443
+export VLESS_PORT=8444
+# ... etc
+```
+
+### Certificate Storage
+
+TLS certificates are stored in a Docker volume named `singbox-tls`. To backup certificates:
+
+```bash
+docker run --rm -v singbox-tls:/tls -v $(pwd):/backup alpine tar czf /backup/tls-backup.tar.gz -C /tls .
+```
+
+### Configuration Validation
+
+The entrypoint script automatically validates the configuration before starting. To manually validate:
+
+```bash
+docker run --rm -v $(pwd)/config.json:/etc/sing-box/config.json ghcr.io/vaayne/singbox-docker:latest sing-box check -c /etc/sing-box/config.json
+```
+
+## 📊 Monitoring
+
+### View logs
+```bash
+docker-compose logs -f
+```
+
+### Check service status
+```bash
+docker-compose ps
+```
+
+### Monitor resource usage
+```bash
+docker stats singbox
+```
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+1. **Certificate generation fails**
+   - Ensure your domain points to the server
+   - Check Cloudflare API token permissions
+   - Verify CF_TOKEN is set correctly
+
+2. **Connection refused**
+   - Check firewall rules
+   - Verify ports are not in use: `netstat -tulpn | grep LISTEN`
+   - Ensure Docker is using host network mode
+
+3. **High CPU usage**
+   - Normal during initial certificate generation
+   - Check for DOS attacks if persistent
+
+### Debug Mode
+
+For detailed logs, modify docker-compose.yaml:
+
+```yaml
+command: ["sing-box", "run", "-c", "/etc/sing-box/config.json", "-D", "/var/log/sing-box"]
+```
+
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Disclaimer
+## 📄 License
 
-This configuration is provided as-is. Please ensure you comply with local laws and regulations when using proxy services.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## ⚠️ Disclaimer
+
+This software is provided for educational and legitimate use only. Users are responsible for complying with local laws and regulations. The authors assume no liability for misuse of this software.

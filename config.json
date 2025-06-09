@@ -77,7 +77,9 @@
       "listen_port": "$PORT_VMESS",
       "users": [
         {
-          "uuid": "$UUID"
+          "name": "$USERNAME",
+          "uuid": "$UUID",
+          "alterId": 0
         }
       ],
       "transport": {
@@ -114,9 +116,7 @@
       "masquerade": "https://bing.com",
       "tls": {
         "enabled": true,
-        "alpn": [
-          "h3"
-        ],
+        "alpn": ["h3"],
         "min_version": "1.3",
         "max_version": "1.3",
         "server_name": "$DOMAIN",
@@ -144,9 +144,7 @@
       "congestion_control": "bbr",
       "tls": {
         "enabled": true,
-        "alpn": [
-          "h3"
-        ],
+        "alpn": ["h3"],
         "server_name": "$DOMAIN",
         "acme": {
           "domain": "$DOMAIN",
@@ -157,6 +155,45 @@
           }
         }
       }
+    },
+    {
+      "tag": "tuic-proxy-in",
+      "type": "tuic",
+      "listen": "::",
+      "listen_port": "$PORT_TUIC_PROXY",
+      "users": [
+        {
+          "uuid": "$UUID",
+          "password": "$PASSWORD"
+        }
+      ],
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "alpn": ["h3"],
+        "server_name": "$DOMAIN",
+        "acme": {
+          "domain": "$DOMAIN",
+          "email": "$EMAIL",
+          "dns01_challenge": {
+            "provider": "cloudflare",
+            "api_token": "$CF_TOKEN"
+          }
+        }
+      }
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "::",
+      "listen_port": "$PORT_MIXED",
+      "users": [
+        {
+          "username": "$UUID",
+          "password": "$PASSWORD"
+        }
+      ],
+      "set_system_proxy": false
     }
   ],
   "outbounds": [
@@ -167,13 +204,28 @@
     {
       "type": "dns",
       "tag": "dns-out"
+    },
+    {
+      "type": "socks",
+      "tag": "tuic-proxy-out",
+      "server": "$SOCKS_SERVER",
+      "server_port": "$PORT_MIXED",
+      "version": "5",
+      "username": "$UUID",
+      "password": "$PASSWORD"
     }
   ],
   "route": {
     "rules": [
       {
         "protocol": "dns",
+        "action": "route",
         "outbound": "dns-out"
+      },
+      {
+        "inbound": ["tuic-proxy-in"],
+        "action": "route",
+        "outbound": "tuic-proxy-out"
       }
     ],
     "final": "direct"

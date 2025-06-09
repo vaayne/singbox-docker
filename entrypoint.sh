@@ -1,14 +1,4 @@
 #!/bin/bash
-###
-# @Author: Ray zai7lou@outlook.com
-# @Date: 2024-07-12 22:00:19
-# @LastEditors: Ray zai7lou@outlook.com
-# @LastEditTime: 2024-07-13 14:15:04
-# @FilePath: \sing-box-installer\sing-box\data\entry.sh
-# @Description:
-#
-# Copyright (c) 2024 by ${git_name_email}, All Rights Reserved.
-###
 set -e
 set -u
 set -o pipefail
@@ -22,6 +12,9 @@ PORT_VLESS="${PORT_VLESS:=20442}"
 PORT_VMESS="${PORT_VMESS:=20443}"
 PORT_HYSTERIA="${PORT_HYSTERIA:=20444}"
 PORT_TUIC="${PORT_TUIC:=20445}"
+PORT_TUIC_PROXY="${PORT_TUIC_PROXY:=20446}"
+PORT_MIXED="${PORT_MIXED:=20447}"
+SOCKS_SERVER="${SOCKS_SERVER:=192.168.1.1}"
 
 # Update configuration with environment variables
 sed -i \
@@ -30,6 +23,9 @@ sed -i \
     -e "s/\"\$PORT_VMESS\"/$PORT_VMESS/g" \
     -e "s/\"\$PORT_HYSTERIA\"/$PORT_HYSTERIA/g" \
     -e "s/\"\$PORT_TUIC\"/$PORT_TUIC/g" \
+    -e "s/\"\$PORT_TUIC_PROXY\"/$PORT_TUIC_PROXY/g" \
+    -e "s/\"\$PORT_MIXED\"/$PORT_MIXED/g" \
+    -e "s/\"\$SOCKS_SERVER\"/$SOCKS_SERVER/g" \
     -e "s/\$CF_TOKEN/$CF_TOKEN/g" \
     -e "s/\$DOMAIN/$DOMAIN/g" \
     -e "s/\$EMAIL/$EMAIL/g" \

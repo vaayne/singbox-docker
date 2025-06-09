@@ -17,6 +17,9 @@ services:
       - PORT_VMESS=20443
       - PORT_HYSTERIA=20444
       - PORT_TUIC=20445
+      - PORT_TUIC_PROXY=20446
+      - PORT_MIXED=20447
+      - SOCKS_SERVER=localhost
     volumes:
       - tls-data:/tls
 
